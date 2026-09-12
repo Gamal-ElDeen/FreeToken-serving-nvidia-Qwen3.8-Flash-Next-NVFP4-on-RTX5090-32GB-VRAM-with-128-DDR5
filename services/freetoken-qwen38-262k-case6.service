@@ -1,0 +1,43 @@
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (262k Case6 disk-PLE)
+After=network.target
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+LimitNOFILE=1048576
+CPUAffinity=0-7
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/home/user/.venvs/ftok/bin/ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.92 \
+  --moe-strategy offload \
+  --moe-cache-auto \
+  --num-tokens 262144 \
+  --kv-reserve-tokens 262144 \
+  --max-seq-len-override 262144 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend disk \
+  --expert-load parallel \
+  --cache-type radix \
+  --max-prefill-length 10240 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

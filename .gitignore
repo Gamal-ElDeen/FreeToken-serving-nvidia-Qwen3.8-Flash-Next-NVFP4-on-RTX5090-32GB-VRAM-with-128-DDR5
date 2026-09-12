@@ -1,0 +1,11 @@
+# aiperf raw payload files (large, synthetic corpus — never commit)
+inputs.json
+inputs_*.json
+
+# aiperf full export directories (keep only *_console.txt + aiperf_*.json summaries)
+logs/
+out/
+
+# transient
+*.pid
+*.bak

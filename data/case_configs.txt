@@ -1,0 +1,6 @@
+case1: 128k | ratio 0.92 | moe-cache-auto→5740 | ple disk | offload
+case2: 128k | ratio 0.92 | moe-cache-size 5489 | ple disk | offload
+case3: 128k | ratio 0.95 | moe-cache-size 5489 | ple pinned | LimitNOFILE
+case4: 128k | ratio 0.95 | moe-cache-size 5489 | ple pinned | LimitNOFILE+MEMLOCK | CPUAffinity 0-7
+case5: 262k | ratio 0.93 | moe-cache-auto→4662 | ple pinned | serial expert load (low RAM)
+case6: 262k | ratio 0.92 | moe-cache-auto | ple disk | expert-load parallel | max-prefill 10240

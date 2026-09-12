@@ -1,0 +1,372 @@
+case 1:
+
+Ram:
+               total        used        free      shared  buff/cache   available
+Mem:           122Gi        69Gi       3.2Gi        63Gi       114Gi        53Gi
+Swap:           31Gi       5.0Gi        26Gi
+
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (128k max-decode)
+After=network.target gpu-power-limit.service
+Requires=gpu-power-limit.service
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/bin/bash -c 'source /home/user/.venvs/ftok/bin/activate && \
+  exec ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.92 \
+  --moe-strategy offload \
+  --moe-cache-auto \
+  --num-tokens 131072 \
+  --kv-reserve-tokens 131072 \
+  --max-seq-len-override 131072 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend disk \
+  --cache-type radix \
+  --max-prefill-length 8192 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3'
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+---------------------------------------------
+
+case 2
+
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (128k max-decode)
+After=network.target gpu-power-limit.service
+Requires=gpu-power-limit.service
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/bin/bash -c 'source /home/user/.venvs/ftok/bin/activate && \
+  exec ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.92 \
+  --moe-strategy offload \
+  --moe-cache-size 5489 \
+  --num-tokens 131072 \
+  --kv-reserve-tokens 131072 \
+  --max-seq-len-override 131072 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend disk \
+  --cache-type radix \
+  --max-prefill-length 8192 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3'
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+---------------------------------------------------------------
+
+Case 3
+
+Ram:
+                total        used        free      shared  buff/cache   available
+Mem:            122Gi       118Gi       3.0Gi       111Gi       114Gi       4.6Gi
+Swap:           31Gi       6.2Gi        25Gi
+
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (128k max-decode)
+After=network.target gpu-power-limit.service
+Requires=gpu-power-limit.service
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+LimitNOFILE=1048576
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/home/user/.venvs/ftok/bin/ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.95 \
+  --moe-strategy offload \
+  --moe-cache-size 5489 \
+  --num-tokens 131072 \
+  --kv-reserve-tokens 131072 \
+  --max-seq-len-override 131072 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend pinned \
+  --cache-type radix \
+  --max-prefill-length 8192 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+-------------------------------------------------------------------------------
+
+case 4
+
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (128k max-decode)
+After=network.target gpu-power-limit.service
+Requires=gpu-power-limit.service
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+LimitNOFILE=1048576
+LimitMEMLOCK=infinity
+CPUAffinity=0-7
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/home/user/.venvs/ftok/bin/ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.95 \
+  --moe-strategy offload \
+  --moe-cache-size 5489 \
+  --num-tokens 131072 \
+  --kv-reserve-tokens 131072 \
+  --max-seq-len-override 131072 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend pinned \
+  --cache-type radix \
+  --max-prefill-length 8192 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+------------------------------------------------------------------------------
+
+case 5
+
+Ram:
+                total        used        free      shared  buff/cache   available 
+Mem:            122Gi       118Gi       2.8Gi       111Gi       113Gi       4.3Gi
+Swap:           31Gi       6.2Gi        25Gi
+
+VRAM:
+MEM[||||||||||||||||||31.713Gi/31.843G
+
+I also saved 
+journalctl -u freetoken-bench -o json | python3 -c "
+import json, sys
+for line in sys.stdin:
+    print(json.loads(line).get('MESSAGE', ''))
+" > ~/ai/benchmarks/case5/moe.txt
+
+to know the actual moe
+
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (128k max-decode)
+After=network.target gpu-power-limit.service
+Requires=gpu-power-limit.service
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+LimitNOFILE=1048576
+LimitMEMLOCK=infinity
+CPUAffinity=0-7
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/home/user/.venvs/ftok/bin/ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.93 \
+  --moe-strategy offload \
+  --moe-cache-auto \
+  --num-tokens 262144 \
+  --kv-reserve-tokens 262144 \
+  --max-seq-len-override 262144 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend pinned \
+  --cache-type radix \
+  --max-prefill-length 8192 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+---------------------------------------------------------------------------
+
+Case 6:
+
+RAM:
+
+               total        used        free      shared  buff/cache   available
+Mem:           122Gi        76Gi        44Gi        64Gi        67Gi        46Gi
+Swap:           31Gi          0B        31Gi
+------
+
+VRAM:
+Device 0 [NVIDIA GeForce RTX 5090] PCIe GEN 5@16x RX: 50.16 GiB/s TX: 1.873 GiB
+GPU[|||||||||||||||||||||||||||||||100%] MEM[||||||||||||||||||31.701Gi/31.843G
+
+-----
+
+service file:
+---------
+
+[Unit]
+Description=FreeToken — nvidia/Qwen3.8-Flash-Next-NVFP4 (262k max-decode)
+After=network.target gpu-power-limit.service
+Requires=gpu-power-limit.service
+
+[Service]
+Type=simple
+User=user
+WorkingDirectory=/home/user/ai/FreeToken
+LimitNOFILE=1048576
+CPUAffinity=0-7
+Environment="CUDA_HOME=/usr/local/cuda"
+Environment="PATH=/usr/local/cuda/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="CUDA_VISIBLE_DEVICES=0"
+Environment="PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True"
+ExecStart=/home/user/.venvs/ftok/bin/ft serve \
+  --model-path /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --gpu 0 \
+  --host 0.0.0.0 \
+  --port 8000 \
+  --max-running-requests 1 \
+  --memory-ratio 0.92 \
+  --moe-strategy offload \
+  --moe-cache-auto \
+  --num-tokens 262144 \
+  --kv-reserve-tokens 262144 \
+  --max-seq-len-override 262144 \
+  --attention-backend qsa_sparse \
+  --quant-backend moe.nvfp4=triton \
+  --ple-backend disk \
+  --expert-load parallel \
+  --cache-type radix \
+  --max-prefill-length 10240 \
+  --cuda-graph-max-bs 1 \
+  --tool-call-parser qwen3_coder \
+  --reasoning-parser qwen3
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+----
+to get the moe number:
+
+journalctl -u freetoken-bench -o json | python3 -c "
+import json, sys
+for line in sys.stdin:
+    print(json.loads(line).get('MESSAGE', ''))
+" > ~/ai/benchmarks/case6/moe.txt
+
+-------------------------------------------------------------
+
+the commands was like:
+
+aiperf profile \
+  --model Qwen3.8-Flash-Next-NVFP4 \
+  --url http://localhost:8000 \
+  --tokenizer /home/user/models/qwen/Qwen3.8-Flash-Next-NVFP4 \
+  --endpoint-type chat \
+  --synthetic-input-tokens-mean 130800 \
+  --synthetic-input-tokens-stddev 0 \
+  --output-tokens-mean 128 \
+  --streaming \
+  --artifact-dir ~/ai/benchmarks/case1/ \
+  --profile-export-prefix aiperf_130k \
+  --export-level summary \
+  2>&1 | tee ~/ai/benchmarks/case1/aiperf_130k_console.txt
+
+with different 
+  --synthetic-input-tokens-mean 
+
+
+llama-benchy --base-url http://localhost:8000/v1 \
+  --model Qwen3.8-Flash-Next-NVFP4 \
+  --depth 2048 20000 65000 130800 \
+  --pp 512 \
+  --tg 128 \
+  --runs 3 \
+  --save-result ~/benchmarks/case1/results.json \
+  --format json \
+  2>&1 | tee ~/benchmarks/case1/llamabenchy_full.txt
+
+
+

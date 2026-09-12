@@ -1,0 +1,13 @@
+[Unit]
+Description=Cap GPU power limit (one-shot)
+After=multi-user.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+# Adjust the power cap (--pl, watts) for your card. RTX 5090 stock is 575 W.
+ExecStart=/usr/bin/nvidia-smi -pl 500
+ExecStop=/usr/bin/nvidia-smi -pl 575
+
+[Install]
+WantedBy=multi-user.target
